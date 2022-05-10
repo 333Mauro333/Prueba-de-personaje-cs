@@ -20,9 +20,12 @@ namespace MgtvPlayerTestCs
 
         public void Draw()
         {
-            C.GoToCoordinates(position.x, position.y);
+            if (active)
+            {
+                C.GoToCoordinates(position.x, position.y);
 
-            C.WriteInColor(renderer, ConsoleColor.Yellow);
+                C.WriteInColor(renderer, ConsoleColor.Yellow);
+            }
         }
     }
 }

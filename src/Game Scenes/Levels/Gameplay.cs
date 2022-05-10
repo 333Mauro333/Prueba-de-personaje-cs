@@ -31,7 +31,7 @@ namespace MgtvPlayerTestCs
 
             generar = new Random();
 
-            player = new Player(centerX, centerY, 100, "P", ConsoleColor.Yellow, 1);
+            player = new Player(centerX, centerY, 100, "P", ConsoleColor.Yellow, 5);
             player.SetBorderLimits(borderLimits);
 
             enemy = new Enemy(centerX + 20, centerY + 5, 100, "E");
@@ -44,7 +44,9 @@ namespace MgtvPlayerTestCs
             ui.SetUIPointsPosition(centerX + (distCentX / 2), borderLimits.upLimit - 1);
             ui.WriteUI();
 
+            C.SetForegroundColor(ConsoleColor.White);
             C.DrawFrame(borderLimits.leftLimit, borderLimits.upLimit, borderLimits.rightLimit, borderLimits.downLimit);
+            C.SetForegroundColor(ConsoleColor.Gray);
         }
 
 
@@ -66,39 +68,65 @@ namespace MgtvPlayerTestCs
         {
             if (CollisionManager.IsColliding(player, enemy))
             {
-                int x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
-                int y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
-
-
-                player.Lose();
-                ui.UpdateLives();
-
-                while (x == enemy.GetPosition().x && y == enemy.GetPosition().y)
+                if (player.IsInvincible())
                 {
+                    int x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
+                    int y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
+
+
+                    while (x == player.GetPosition().x && y == player.GetPosition().y)
+                    {
+                        x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
+                        y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
+                    }
+                    enemy.SetPosition(x, y);
+
                     x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
                     y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
-                }
 
-                player.SetPosition(x, y);
+                    while ((x == player.GetPosition().x && y == player.GetPosition().y) || (x == enemy.GetPosition().x && y == enemy.GetPosition().y))
+                    {
+                        x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
+                        y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
+                    }
+                    powerUp.Activate();
+                    powerUp.SetPosition(x, y);
+
+                    player.EndPowerUpEfect();
+                    player.AddPoints(1);
+                    ui.UpdatePoints();
+
+                    C.GoToCoordinates(C.GetScreenWidth() / 2 - 3, 0);
+                    Console.Write("      ");
+                }
+                else
+                {
+                    int x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
+                    int y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
+
+
+                    player.Lose();
+                    ui.UpdateLives();
+
+                    while (x == enemy.GetPosition().x && y == enemy.GetPosition().y)
+                    {
+                        x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
+                        y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
+                    }
+
+                    player.SetPosition(x, y);
+                }
             }
 
             if (CollisionManager.IsColliding(player, powerUp))
             {
-                if (!player.IsInvincible())
+                if (powerUp.IsActive())
                 {
                     player.BecomeInvincible();
+                    powerUp.Deactivate();
 
                     C.GoToCoordinates(C.GetScreenWidth() / 2 - 3, 0);
                     C.WriteInColor("ATTACK", ConsoleColor.White, ConsoleColor.Red);
-                }
-            }
-            else
-            {
-                if (player.IsInvincible())
-                {
-                    player.EndPowerUpEfect();
-                    C.GoToCoordinates(C.GetScreenWidth() / 2 - 3, 0);
-                    Console.Write("      ");
                 }
             }
         }
