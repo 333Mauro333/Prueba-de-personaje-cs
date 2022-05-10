@@ -8,6 +8,8 @@ namespace MgtvPlayerTestCs
     {
         BorderLimits borderLimits;
 
+        Random generar;
+
         Player player;
         Enemy enemy;
         UIManager ui;
@@ -26,7 +28,9 @@ namespace MgtvPlayerTestCs
             borderLimits.leftLimit = centerX - distCentX;
             borderLimits.rightLimit = centerX + distCentX;
 
-            player = new Player(centerX, centerY, 100, "P", ConsoleColor.Yellow);
+            generar = new Random();
+
+            player = new Player(centerX, centerY, 100, "P", ConsoleColor.Yellow, 1);
             player.SetBorderLimits(borderLimits);
 
             enemy = new Enemy(centerX + 20, centerY + 5, 100, "E");
@@ -45,11 +49,33 @@ namespace MgtvPlayerTestCs
         {
             player.Update(key);
             enemy.Update();
+
+            CheckCollisions();
         }
         public override void Draw()
         {
             player.Draw();
             enemy.Draw();
+        }
+
+        void CheckCollisions()
+        {
+            if (CollisionManager.IsColliding(player, enemy))
+            {
+                player.Lose();
+                ui.UpdateLives();
+
+                int x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
+                int y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
+
+                while (x == enemy.GetPosition().x && y == enemy.GetPosition().y)
+                {
+                    x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
+                    y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
+                }
+
+                player.SetPosition(x, y);
+            }
         }
     }
 }

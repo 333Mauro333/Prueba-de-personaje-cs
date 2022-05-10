@@ -8,6 +8,7 @@ namespace MgtvPlayerTestCs
     {
         PlayerControls controls;
 
+        bool isAlive;
         int lives;
 
         const int maxLimitPoints = 999999;
@@ -21,6 +22,7 @@ namespace MgtvPlayerTestCs
             controls.left = ConsoleKey.LeftArrow;
             controls.right = ConsoleKey.RightArrow;
 
+            isAlive = lives >= 0;
             this.lives = lives;
             points = 0;
         }
@@ -46,9 +48,18 @@ namespace MgtvPlayerTestCs
         }
         public void Lose()
         {
-            lives = (lives >= 0) ? lives - 1 : 0;
+            if (lives <= 0)
+            {
+                isAlive = false;
+            }
+
+            lives = (lives > 0) ? lives - 1 : 0;
         }
 
+        public bool IsAlive()
+        {
+            return isAlive;
+        }
         public int GetLives()
         {
             return lives;

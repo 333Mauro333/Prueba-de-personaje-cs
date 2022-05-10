@@ -45,16 +45,13 @@ namespace MgtvPlayerTestCs
             WriteLives();
             WritePoints();
         }
-        public void UpdateUI(bool updatePoints = true)
+        public void UpdatePoints()
         {
-            if (updatePoints)
-            {
-                WritePoints();
-            }
-            else
-            {
-                WriteLives();
-            }
+            WritePoints();
+        }
+        public void UpdateLives()
+        {
+            WriteLives();
         }
 
         void WriteLives()
@@ -68,13 +65,44 @@ namespace MgtvPlayerTestCs
             {
                 c = ConsoleColor.Red;
             }
-
-            C.WriteInColor(player.GetLives().ToString(), c);
+            if (player.IsAlive())
+            {
+                C.WriteInColor(player.GetLives().ToString(), c);
+            }
+            else
+            {
+                C.WriteInColor("DEAD", c);
+            }
         }
         void WritePoints()
         {
             C.GoToCoordinates(pointsDisplayPosition.x, pointsDisplayPosition.y);
-            Console.Write(pointsText + player.GetPoints());
+            Console.Write(pointsText);
+
+            if (player.GetPoints() < 10)
+            {
+                Console.Write("00000" + player.GetPoints().ToString());
+            }
+            else if (player.GetPoints() < 100)
+            {
+                Console.Write("0000" + player.GetPoints().ToString());
+            }
+            else if (player.GetPoints() < 1000)
+            {
+                Console.Write("000" + player.GetPoints().ToString());
+            }
+            else if (player.GetPoints() < 10000)
+            {
+                Console.Write("00" + player.GetPoints().ToString());
+            }
+            else if (player.GetPoints() < 100000)
+            {
+                Console.Write("0" + player.GetPoints().ToString());
+            }
+            else
+            {
+                Console.Write(player.GetPoints().ToString());
+            }
         }
     }
 }
