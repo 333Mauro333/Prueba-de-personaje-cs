@@ -9,6 +9,7 @@ namespace MgtvPlayerTestCs
         BorderLimits borderLimits;
 
         Player player;
+        Enemy enemy;
 
 
         public Gameplay()
@@ -25,7 +26,10 @@ namespace MgtvPlayerTestCs
             borderLimits.rightLimit = centerX + distCentX;
 
             player = new Player(centerX, centerY, 100, "P", ConsoleColor.Yellow);
-            player.SetBorderLimits(borderLimits.upLimit, borderLimits.downLimit, borderLimits.leftLimit, borderLimits.rightLimit);
+            player.SetBorderLimits(borderLimits);
+
+            enemy = new Enemy(centerX + 20, centerY + 5, 100, "E");
+            enemy.SetBorderLimits(borderLimits);
 
             C.DrawFrame(borderLimits.leftLimit, borderLimits.upLimit, borderLimits.rightLimit, borderLimits.downLimit);
         }
@@ -34,10 +38,12 @@ namespace MgtvPlayerTestCs
         public override void Update(ConsoleKey key)
         {
             player.Update(key);
+            enemy.Update();
         }
         public override void Draw()
         {
             player.Draw();
+            enemy.Draw();
         }
     }
 }

@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Character\Character.cs" />
+    <Compile Include="src\Enemy\Enemy.cs" />
     <Compile Include="src\Entity\Entity.cs" />
     <Compile Include="src\Game Manager\GameManager.cs" />
     <Compile Include="src\Game Scenes\Levels\Gameplay.cs" />
@@ -67,7 +68,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="src\Enemy\" />
     <Folder Include="src\Game Scenes\Screens\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -53,12 +53,9 @@ namespace MgtvPlayerTestCs
             health = maxHealth;
         }
 
-        public void SetBorderLimits(int upLimit, int downLimit, int leftLimit, int rightLimit)
+        public void SetBorderLimits(BorderLimits borderLimits)
         {
-            borderLimits.upLimit = upLimit;
-            borderLimits.downLimit = downLimit;
-            borderLimits.leftLimit = leftLimit;
-            borderLimits.rightLimit = rightLimit;
+            this.borderLimits = borderLimits;
         }
 
 
