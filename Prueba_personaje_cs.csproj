@@ -59,7 +59,9 @@
     <Compile Include="src\Player\Player.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="src\Scene Manager\SceneManager.cs" />
+    <Compile Include="src\Scene\Level\Level.cs" />
     <Compile Include="src\Scene\Scene.cs" />
+    <Compile Include="src\Scene\Screen\Screen.cs" />
     <Compile Include="src\Structs and Enums\Structs\StructBorderLimits.cs" />
     <Compile Include="src\Structs and Enums\Structs\StructPlayerControls.cs" />
     <Compile Include="src\Structs and Enums\Enums\EnumDirection.cs" />

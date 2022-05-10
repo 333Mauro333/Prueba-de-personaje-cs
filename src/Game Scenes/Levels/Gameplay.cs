@@ -4,7 +4,7 @@ using Mgtv_Library;
 
 namespace MgtvPlayerTestCs
 {
-    class Gameplay : Scene
+    class Gameplay : Level
     {
         BorderLimits borderLimits;
 
@@ -58,7 +58,7 @@ namespace MgtvPlayerTestCs
             enemy.Draw();
         }
 
-        void CheckCollisions()
+        protected override void CheckCollisions()
         {
             if (CollisionManager.IsColliding(player, enemy))
             {

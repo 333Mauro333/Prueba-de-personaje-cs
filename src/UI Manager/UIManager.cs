@@ -65,6 +65,7 @@ namespace MgtvPlayerTestCs
             {
                 c = ConsoleColor.Red;
             }
+
             if (player.IsAlive())
             {
                 C.WriteInColor(player.GetLives().ToString(), c);
