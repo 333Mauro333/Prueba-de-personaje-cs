@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Character\Character.cs" />
+    <Compile Include="src\Collision Manager\CollisionManager.cs" />
     <Compile Include="src\Enemy\Enemy.cs" />
     <Compile Include="src\Entity\Entity.cs" />
     <Compile Include="src\Game Manager\GameManager.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="src\Structs and Enums\Structs\StructPlayerControls.cs" />
     <Compile Include="src\Structs and Enums\Enums\EnumDirection.cs" />
     <Compile Include="src\Structs and Enums\Structs\StructVectort2i.cs" />
+    <Compile Include="src\UI Manager\UIManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

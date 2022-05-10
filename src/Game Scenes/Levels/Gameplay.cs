@@ -10,6 +10,7 @@ namespace MgtvPlayerTestCs
 
         Player player;
         Enemy enemy;
+        UIManager ui;
 
 
         public Gameplay()
@@ -17,7 +18,7 @@ namespace MgtvPlayerTestCs
             int centerX = C.GetScreenWidth() / 2;
             int centerY = C.GetScreenHeight() / 2;
             int distCentX = 45;
-            int distCentY = 10;
+            int distCentY = 12;
 
 
             borderLimits.upLimit = centerY - distCentY;
@@ -30,6 +31,11 @@ namespace MgtvPlayerTestCs
 
             enemy = new Enemy(centerX + 20, centerY + 5, 100, "E");
             enemy.SetBorderLimits(borderLimits);
+
+            ui = new UIManager(player);
+            ui.SetUILivesPosition(centerX - (distCentX / 2) - 10, borderLimits.upLimit - 1);
+            ui.SetUIPointsPosition(centerX + (distCentX / 2), borderLimits.upLimit - 1);
+            ui.WriteUI();
 
             C.DrawFrame(borderLimits.leftLimit, borderLimits.upLimit, borderLimits.rightLimit, borderLimits.downLimit);
         }

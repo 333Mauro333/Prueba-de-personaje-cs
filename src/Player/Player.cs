@@ -8,13 +8,21 @@ namespace MgtvPlayerTestCs
     {
         PlayerControls controls;
 
+        int lives;
 
-        public Player(int x, int y, int health, string renderer, ConsoleColor color = ConsoleColor.White) : base(x, y, health, renderer, color)
+        const int maxLimitPoints = 999999;
+        int points;
+
+
+        public Player(int x, int y, int health, string renderer, ConsoleColor color = ConsoleColor.White, int lives = 5) : base(x, y, health, renderer, color)
         {
             controls.up = ConsoleKey.UpArrow;
             controls.down = ConsoleKey.DownArrow;
             controls.left = ConsoleKey.LeftArrow;
             controls.right = ConsoleKey.RightArrow;
+
+            this.lives = lives;
+            points = 0;
         }
 
 
@@ -27,6 +35,27 @@ namespace MgtvPlayerTestCs
             C.GoToCoordinates(position.x, position.y);
 
             C.WriteInColor(renderer, color);
+        }
+
+        public void AddPoints(int points)
+        {
+            if (points > 0)
+            {
+                this.points = (this.points + points < maxLimitPoints) ? this.points + points : maxLimitPoints;
+            }
+        }
+        public void Lose()
+        {
+            lives = (lives >= 0) ? lives - 1 : 0;
+        }
+
+        public int GetLives()
+        {
+            return lives;
+        }
+        public int GetPoints()
+        {
+            return points;
         }
 
 
