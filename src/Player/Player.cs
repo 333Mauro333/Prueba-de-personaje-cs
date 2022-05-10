@@ -14,6 +14,8 @@ namespace MgtvPlayerTestCs
         const int maxLimitPoints = 999999;
         int points;
 
+        bool isInvincible;
+
 
         public Player(int x, int y, int health, string renderer, ConsoleColor color = ConsoleColor.White, int lives = 5) : base(x, y, health, renderer, color)
         {
@@ -25,6 +27,8 @@ namespace MgtvPlayerTestCs
             isAlive = lives >= 0;
             this.lives = lives;
             points = 0;
+
+            isInvincible = false;
         }
 
 
@@ -55,10 +59,23 @@ namespace MgtvPlayerTestCs
 
             lives = (lives > 0) ? lives - 1 : 0;
         }
+        public void BecomeInvincible()
+        {
+            isInvincible = true;
+        }
+        public void EndPowerUpEfect()
+        {
+            isInvincible = false;
+        }
+
 
         public bool IsAlive()
         {
             return isAlive;
+        }
+        public bool IsInvincible()
+        {
+            return isInvincible;
         }
         public int GetLives()
         {

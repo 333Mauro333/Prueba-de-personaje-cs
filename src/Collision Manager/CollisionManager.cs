@@ -4,9 +4,9 @@ namespace MgtvPlayerTestCs
 {
     static class CollisionManager
     {
-        public static bool IsColliding(Character c1, Character c2)
+        public static bool IsColliding(Entity e1, Entity e2)
         {
-            return c1.GetPosition().x == c2.GetPosition().x && c1.GetPosition().y == c2.GetPosition().y;
+            return e1.GetPosition().x == e2.GetPosition().x && e1.GetPosition().y == e2.GetPosition().y;
         }
     }
 }

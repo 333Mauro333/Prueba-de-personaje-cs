@@ -12,6 +12,7 @@ namespace MgtvPlayerTestCs
 
         Player player;
         Enemy enemy;
+        PowerUp powerUp;
         UIManager ui;
 
 
@@ -36,6 +37,8 @@ namespace MgtvPlayerTestCs
             enemy = new Enemy(centerX + 20, centerY + 5, 100, "E");
             enemy.SetBorderLimits(borderLimits);
 
+            powerUp = new PowerUp(centerX - (int)(distCentX / 1.5), centerY - 10);
+
             ui = new UIManager(player);
             ui.SetUILivesPosition(centerX - (distCentX / 2) - 10, borderLimits.upLimit - 1);
             ui.SetUIPointsPosition(centerX + (distCentX / 2), borderLimits.upLimit - 1);
@@ -54,6 +57,7 @@ namespace MgtvPlayerTestCs
         }
         public override void Draw()
         {
+            powerUp.Draw();
             player.Draw();
             enemy.Draw();
         }
@@ -62,11 +66,12 @@ namespace MgtvPlayerTestCs
         {
             if (CollisionManager.IsColliding(player, enemy))
             {
-                player.Lose();
-                ui.UpdateLives();
-
                 int x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
                 int y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
+
+
+                player.Lose();
+                ui.UpdateLives();
 
                 while (x == enemy.GetPosition().x && y == enemy.GetPosition().y)
                 {
@@ -75,6 +80,26 @@ namespace MgtvPlayerTestCs
                 }
 
                 player.SetPosition(x, y);
+            }
+
+            if (CollisionManager.IsColliding(player, powerUp))
+            {
+                if (!player.IsInvincible())
+                {
+                    player.BecomeInvincible();
+
+                    C.GoToCoordinates(C.GetScreenWidth() / 2 - 3, 0);
+                    C.WriteInColor("ATTACK", ConsoleColor.White, ConsoleColor.Red);
+                }
+            }
+            else
+            {
+                if (player.IsInvincible())
+                {
+                    player.EndPowerUpEfect();
+                    C.GoToCoordinates(C.GetScreenWidth() / 2 - 3, 0);
+                    Console.Write("      ");
+                }
             }
         }
     }

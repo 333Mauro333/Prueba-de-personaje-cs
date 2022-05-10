@@ -13,7 +13,7 @@ namespace MgtvPlayerTestCs
         public GameManager()
         {
             inGame = true;
-            framesPerSecond = 30;
+            framesPerSecond = 60;
 
             C.HideCursor();
         }
