@@ -14,6 +14,7 @@ namespace MgtvPlayerTestCs
         string livesText;
         string pointsText;
 
+
         public UIManager(Player player)
         {
             this.player = player;
@@ -82,27 +83,11 @@ namespace MgtvPlayerTestCs
 
             if (player.GetPoints() < 10)
             {
-                Console.Write("00000" + player.GetPoints().ToString());
-            }
-            else if (player.GetPoints() < 100)
-            {
-                Console.Write("0000" + player.GetPoints().ToString());
-            }
-            else if (player.GetPoints() < 1000)
-            {
-                Console.Write("000" + player.GetPoints().ToString());
-            }
-            else if (player.GetPoints() < 10000)
-            {
-                Console.Write("00" + player.GetPoints().ToString());
-            }
-            else if (player.GetPoints() < 100000)
-            {
-                Console.Write("0" + player.GetPoints().ToString());
+                Console.Write("0" + player.GetPoints().ToString() + " ");
             }
             else
             {
-                Console.Write(player.GetPoints().ToString());
+                Console.Write(player.GetPoints().ToString() + " ");
             }
         }
     }

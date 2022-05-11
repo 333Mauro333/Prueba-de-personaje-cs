@@ -38,9 +38,12 @@ namespace MgtvPlayerTestCs
         }
         public override void Draw()
         {
-            C.GoToCoordinates(position.x, position.y);
+            if (active && visible)
+            {
+                C.GoToCoordinates(position.x, position.y);
 
-            C.WriteInColor(renderer, color);
+                C.WriteInColor(renderer, color);
+            }
         }
 
         public void AddPoints(int points)

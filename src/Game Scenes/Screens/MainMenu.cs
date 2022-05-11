@@ -8,7 +8,6 @@ namespace MgtvPlayerTestCs
     class MainMenu : Screen
     {
         int maxOption;
-
         int xStart;
         int yStart;
 
@@ -192,10 +191,10 @@ namespace MgtvPlayerTestCs
 
         void WriteMenu()
         {
-            C.GoToCoordinates(C.GetScreenWidth() / 2 - 6, 10);
+            C.GoToCoordinates(C.GetScreenWidth() / 2 - 6, 15);
             WriteOption(1);
 
-            C.GoToCoordinates(C.GetScreenWidth() / 2 - 6, 12);
+            C.GoToCoordinates(C.GetScreenWidth() / 2 - 6, 17);
             WriteOption(2);
         }
         void WriteOption(int optionNumber)

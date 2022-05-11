@@ -37,6 +37,7 @@ namespace MgtvPlayerTestCs
             return health;
         }
 
+        
         public void ReceiveDamage(int damage)
         {
             health = (damage >= health) ? 0 : health - damage;
@@ -53,6 +54,7 @@ namespace MgtvPlayerTestCs
         {
             health = maxHealth;
         }
+
 
         public void SetBorderLimits(BorderLimits borderLimits)
         {

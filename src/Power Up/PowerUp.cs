@@ -20,7 +20,7 @@ namespace MgtvPlayerTestCs
 
         public void Draw()
         {
-            if (active)
+            if (active && visible)
             {
                 C.GoToCoordinates(position.x, position.y);
 

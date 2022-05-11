@@ -16,6 +16,8 @@ namespace MgtvPlayerTestCs
         PowerUp powerUp;
         UIManager ui;
 
+        bool inPause;
+
 
         public Gameplay()
         {
@@ -48,15 +50,30 @@ namespace MgtvPlayerTestCs
             C.SetForegroundColor(ConsoleColor.White);
             C.DrawFrame(borderLimits.leftLimit, borderLimits.upLimit, borderLimits.rightLimit, borderLimits.downLimit);
             C.SetForegroundColor(ConsoleColor.Gray);
+
+            inPause = false;
         }
 
 
         public override void Update(ConsoleKey key)
         {
-            player.Update(key);
-            enemy.Update();
+            if (key == ConsoleKey.P)
+            {
+                PauseGame();
+            }
+            if (key == ConsoleKey.Escape && inPause)
+            {
+                Console.Clear();
+                SceneManager.LoadScene(new MainMenu(1));
+            }
 
-            CheckCollisions();
+            if (!inPause)
+            {
+                player.Update(key);
+                enemy.Update();
+
+                CheckCollisions();
+            }
         }
         public override void Draw()
         {
@@ -129,6 +146,36 @@ namespace MgtvPlayerTestCs
                     C.GoToCoordinates(C.GetScreenWidth() / 2 - 3, 0);
                     C.WriteInColor("ATTACK", ConsoleColor.White, ConsoleColor.Red);
                 }
+            }
+        }
+        void WriteOptions()
+        {
+            C.GoToCoordinates(C.GetScreenWidth() / 2 - 30, C.GetScreenHeight() / 2 - 1);
+            Console.Write("PAUSE. PRESS \"P\" TO CONTINUE (OR ESC TO RETURN TO MAIN MENU)");
+        }
+        void EraseOptions()
+        {
+            C.GoToCoordinates(C.GetScreenWidth() / 2 - 30, C.GetScreenHeight() / 2 - 1);
+            Console.Write("                                                              ");
+        }
+
+        void PauseGame()
+        {
+            inPause = !inPause;
+
+            if (inPause)
+            {
+                player.MakeInvisible();
+                enemy.MakeInvisible();
+                powerUp.MakeInvisible();
+                WriteOptions();
+            }
+            else
+            {
+                player.MakeVisible();
+                enemy.MakeVisible();
+                powerUp.MakeVisible();
+                EraseOptions();
             }
         }
     }
