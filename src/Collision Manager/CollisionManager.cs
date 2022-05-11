@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MgtvPlayerTestCs
+﻿namespace MgtvPlayerTestCs
 {
     static class CollisionManager
     {

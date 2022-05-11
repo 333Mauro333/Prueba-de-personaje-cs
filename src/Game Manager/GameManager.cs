@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Mgtv_Library;
 
 
@@ -6,8 +7,8 @@ namespace MgtvPlayerTestCs
 {
     class GameManager
     {
-        bool inGame;
-        int framesPerSecond;
+        static bool inGame;
+        static int framesPerSecond;
 
 
         public GameManager()
@@ -32,9 +33,19 @@ namespace MgtvPlayerTestCs
             }
         }
 
+        public static void EndGame()
+        {
+            inGame = false;
+        }
+        public static int GetFramesPerSecond()
+        {
+            return framesPerSecond;
+        }
+
+
         void Init()
         {
-            SceneManager.LoadScene(new Gameplay());
+            SceneManager.LoadScene(new MainMenu(1));
         }
         void Update()
         {
