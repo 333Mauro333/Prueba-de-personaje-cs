@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Mgtv_Library;
-
 
 namespace MgtvPlayerTestCs
 {
@@ -12,8 +10,6 @@ namespace MgtvPlayerTestCs
         protected string renderer;
         protected ConsoleColor color;
 
-        protected BorderLimits borderLimits;
-
 
         public Character(int x, int y, int health, string renderer, ConsoleColor color) : base(x, y)
         {
@@ -21,11 +17,6 @@ namespace MgtvPlayerTestCs
             this.health = (health >= maxHealth) ? maxHealth : health;
             this.renderer = renderer;
             this.color = color;
-
-            borderLimits.upLimit = 0;
-            borderLimits.downLimit = C.GetScreenHeight();
-            borderLimits.leftLimit = 0;
-            borderLimits.rightLimit = C.GetScreenWidth();
         }
 
 
@@ -56,14 +47,7 @@ namespace MgtvPlayerTestCs
         }
 
 
-        public void SetBorderLimits(BorderLimits borderLimits)
-        {
-            this.borderLimits = borderLimits;
-        }
-
-
         protected abstract void Erase();
         protected abstract void Move(Direction direction);
-        protected abstract bool CanMove(Direction direction);
     }
 }

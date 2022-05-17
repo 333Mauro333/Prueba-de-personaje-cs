@@ -8,10 +8,12 @@ namespace MgtvPlayerTestCs
     {
         PlayerControls controls;
 
+        BorderLimits borderLimits;
+
         bool isAlive;
         int lives;
 
-        const int maxLimitPoints = 999999;
+        const ushort maxLimitPoints = 999;
         int points;
 
         bool isInvincible;
@@ -99,6 +101,11 @@ namespace MgtvPlayerTestCs
             return points;
         }
 
+        public void SetBorderLimits(BorderLimits bl)
+        {
+            borderLimits = bl;
+        }
+
 
         protected override void Erase()
         {
@@ -133,7 +140,7 @@ namespace MgtvPlayerTestCs
                 }
             }
         }
-        protected override bool CanMove(Direction direction)
+        protected bool CanMove(Direction direction)
         {
             switch (direction)
             {

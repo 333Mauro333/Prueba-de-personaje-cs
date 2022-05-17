@@ -43,7 +43,7 @@ namespace MgtvPlayerTestCs
             player2 = new Player(centerX, centerY, 100, "P", ConsoleColor.Blue, false);
             player2.SetBorderLimits(borderLimits);
 
-            enemy = new Enemy(centerX + 20, centerY + 5, 100, "E");
+            enemy = new Enemy(centerX + 20, centerY + 5, 100, "E", new DiagonalMovement());
             enemy.SetBorderLimits(borderLimits);
 
             powerUp = new PowerUp(centerX - (int)(distCentX / 1.5), centerY - 10);

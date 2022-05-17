@@ -12,9 +12,13 @@ namespace MgtvPlayerTestCs
         int counter;
         int framesToMove;
 
+        EnemyMovement movement;
 
-        public Enemy(int x, int y, int health, string renderer, ConsoleColor color = ConsoleColor.Red) : base(x, y, health, renderer, color)
+
+        public Enemy(int x, int y, int health, string renderer, EnemyMovement movement, ConsoleColor color = ConsoleColor.Red) : base(x, y, health, renderer, color)
         {
+            this.movement = movement;
+
             generar = new Random();
 
             counter = 0;
@@ -45,84 +49,12 @@ namespace MgtvPlayerTestCs
         }
         protected override void Move(Direction direction)
         {
-            switch (direction)
-            {
-                case Direction.CornerUpLeft:
-                    position.y--;
-                    position.x--;
-                    break;
-
-                case Direction.SideUp:
-                    position.y--;
-                    break;
-
-                case Direction.CornerUpRight:
-                    position.y--;
-                    position.x++;
-                    break;
-
-                case Direction.SideLeft:
-                    position.x--;
-                    break;
-
-                case Direction.SideRight:
-                    position.x++;
-                    break;
-
-                case Direction.CornerDownLeft:
-                    position.y++;
-                    position.x--;
-                    break;
-
-                case Direction.SideDown:
-                    position.y++;
-                    break;
-
-                case Direction.CornerDownRight:
-                    position.y++;
-                    position.x++;
-                    break;
-            }
+            movement.Move(ref position);
         }
-        protected override bool CanMove(Direction direction)
+
+        public void SetBorderLimits(BorderLimits borderLimits)
         {
-            bool canMoveUp = position.y - 1 > borderLimits.upLimit;
-            bool canMoveDown = position.y + 1 < borderLimits.downLimit;
-            bool canMoveLeft = position.x - 1 > borderLimits.leftLimit;
-            bool canMoveRight = position.x + 1 < borderLimits.rightLimit;
-
-
-            switch (direction)
-            {
-                case Direction.Center:
-                    return false;
-
-                case Direction.CornerUpLeft:
-                    return canMoveUp && canMoveLeft;
-
-                case Direction.SideUp:
-                    return canMoveUp;
-
-                case Direction.CornerUpRight:
-                    return canMoveUp && canMoveRight;
-
-                case Direction.SideLeft:
-                    return canMoveLeft;
-
-                case Direction.SideRight:
-                    return canMoveRight;
-
-                case Direction.CornerDownLeft:
-                    return canMoveDown && canMoveLeft;
-
-                case Direction.SideDown:
-                    return canMoveDown;
-
-                case Direction.CornerDownRight:
-                    return canMoveDown && canMoveRight;
-            }
-
-            return false;
+            movement.SetBorderLimits(borderLimits);
         }
 
         bool TimeToMove()
@@ -137,7 +69,7 @@ namespace MgtvPlayerTestCs
             {
                 Direction direction = (Direction)generar.Next(0, 9);
 
-                if (CanMove(direction))
+                if (movement.CanMove(position))
                 {
                     Erase();
 
