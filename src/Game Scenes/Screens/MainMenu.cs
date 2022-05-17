@@ -41,8 +41,8 @@ namespace MgtvPlayerTestCs
 
         public override void Update(ConsoleKey key)
         {
-            CheckKey(key);
             CheckTitleColor();
+            CheckKey(key);
         }
         public override void Draw()
         {

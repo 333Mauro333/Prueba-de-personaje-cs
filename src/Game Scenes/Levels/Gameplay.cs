@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Mgtv_Library;
 
@@ -15,6 +16,7 @@ namespace MgtvPlayerTestCs
         Enemy enemy;
         PowerUp powerUp;
         UIManager ui;
+        OptionsPanel op;
 
         bool inPause;
 
@@ -47,6 +49,10 @@ namespace MgtvPlayerTestCs
             ui.SetUIPointsPosition(centerX + (distCentX / 2), borderLimits.upLimit - 1);
             ui.WriteUI();
 
+            op = new OptionsPanel(C.GetScreenWidth() / 2, C.GetScreenHeight() / 2 - 1);
+            op.AddOption("RESUME");
+            op.AddOption("RETURN TO MAIN MENU");
+
             C.SetForegroundColor(ConsoleColor.White);
             C.DrawFrame(borderLimits.leftLimit, borderLimits.upLimit, borderLimits.rightLimit, borderLimits.downLimit);
             C.SetForegroundColor(ConsoleColor.Gray);
@@ -57,14 +63,21 @@ namespace MgtvPlayerTestCs
 
         public override void Update(ConsoleKey key)
         {
-            if (key == ConsoleKey.P)
+            if (key == ConsoleKey.Escape && !inPause)
             {
                 PauseGame();
             }
-            if (key == ConsoleKey.Escape && inPause)
+            if (key == ConsoleKey.Enter && inPause)
             {
-                Console.Clear();
-                SceneManager.LoadScene(new MainMenu(1));
+                if (op.ActualOption == 1)
+                {
+                    PauseGame();
+                }
+                else if (op.ActualOption == 2)
+                {
+                    Console.Clear();
+                    SceneManager.LoadScene(new MainMenu(1));
+                }
             }
 
             if (!inPause)
@@ -73,6 +86,10 @@ namespace MgtvPlayerTestCs
                 enemy.Update();
 
                 CheckCollisions();
+            }
+            else
+            {
+                op.Update(key);
             }
         }
         public override void Draw()
@@ -88,25 +105,26 @@ namespace MgtvPlayerTestCs
             {
                 if (player.IsInvincible())
                 {
-                    int x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
-                    int y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
+                    int x;
+                    int y;
 
 
-                    while (x == player.GetPosition().x && y == player.GetPosition().y)
+                    do
                     {
                         x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
                         y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
-                    }
+
+                    } while (CollisionManager.IsColliding(player, x, y) || CollisionManager.IsColliding(powerUp, x, y));
+
                     enemy.SetPosition(x, y);
 
-                    x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
-                    y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
-
-                    while ((x == player.GetPosition().x && y == player.GetPosition().y) || (x == enemy.GetPosition().x && y == enemy.GetPosition().y))
+                    do
                     {
                         x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
                         y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
-                    }
+
+                    } while (CollisionManager.IsColliding(player, x, y) || CollisionManager.IsColliding(enemy, x, y));
+
                     powerUp.Activate();
                     powerUp.SetPosition(x, y);
 
@@ -119,20 +137,33 @@ namespace MgtvPlayerTestCs
                 }
                 else
                 {
-                    int x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
-                    int y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
-
-
                     player.Lose();
                     ui.UpdateLives();
 
-                    while (x == enemy.GetPosition().x && y == enemy.GetPosition().y)
+                    if (player.IsAlive())
                     {
-                        x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
-                        y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
-                    }
+                        int x;
+                        int y;
 
-                    player.SetPosition(x, y);
+
+                        do
+                        {
+                            x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
+                            y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
+
+                        } while (CollisionManager.IsColliding(player, x, y));
+
+                        player.SetPosition(x, y);
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        C.GoToCoordinates(C.GetScreenWidth() / 2 - 5, C.GetScreenHeight() / 2);
+                        C.WriteInColor("GAME OVER", ConsoleColor.Red);
+                        C.Sleep(1000);
+                        Console.Clear();
+                        SceneManager.LoadScene(new MainMenu(1));
+                    }
                 }
             }
 
@@ -148,16 +179,6 @@ namespace MgtvPlayerTestCs
                 }
             }
         }
-        void WriteOptions()
-        {
-            C.GoToCoordinates(C.GetScreenWidth() / 2 - 30, C.GetScreenHeight() / 2 - 1);
-            Console.Write("PAUSE. PRESS \"P\" TO CONTINUE (OR ESC TO RETURN TO MAIN MENU)");
-        }
-        void EraseOptions()
-        {
-            C.GoToCoordinates(C.GetScreenWidth() / 2 - 30, C.GetScreenHeight() / 2 - 1);
-            Console.Write("                                                              ");
-        }
 
         void PauseGame()
         {
@@ -168,14 +189,14 @@ namespace MgtvPlayerTestCs
                 player.MakeInvisible();
                 enemy.MakeInvisible();
                 powerUp.MakeInvisible();
-                WriteOptions();
+                op.Activate();
             }
             else
             {
                 player.MakeVisible();
                 enemy.MakeVisible();
                 powerUp.MakeVisible();
-                EraseOptions();
+                op.Deactivate();
             }
         }
     }

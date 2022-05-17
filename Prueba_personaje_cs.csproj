@@ -57,6 +57,7 @@
     <Compile Include="src\Game Manager\GameManager.cs" />
     <Compile Include="src\Game Scenes\Levels\Gameplay.cs" />
     <Compile Include="src\Game Scenes\Screens\MainMenu.cs" />
+    <Compile Include="src\Options Panel\OptionsPanel.cs" />
     <Compile Include="src\Player\Player.cs" />
     <Compile Include="src\Power Up\PowerUp.cs" />
     <Compile Include="src\Program.cs" />
