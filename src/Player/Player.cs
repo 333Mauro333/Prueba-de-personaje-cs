@@ -17,12 +17,22 @@ namespace MgtvPlayerTestCs
         bool isInvincible;
 
 
-        public Player(int x, int y, int health, string renderer, ConsoleColor color = ConsoleColor.White, int lives = 5) : base(x, y, health, renderer, color)
+        public Player(int x, int y, int health, string renderer, ConsoleColor color = ConsoleColor.White, bool isPlayerOne = true, int lives = 5) : base(x, y, health, renderer, color)
         {
-            controls.up = ConsoleKey.UpArrow;
-            controls.down = ConsoleKey.DownArrow;
-            controls.left = ConsoleKey.LeftArrow;
-            controls.right = ConsoleKey.RightArrow;
+            if (isPlayerOne)
+            {
+                controls.up = ConsoleKey.UpArrow;
+                controls.down = ConsoleKey.DownArrow;
+                controls.left = ConsoleKey.LeftArrow;
+                controls.right = ConsoleKey.RightArrow;
+            }
+            else
+            {
+                controls.up = ConsoleKey.W;
+                controls.down = ConsoleKey.S;
+                controls.left = ConsoleKey.A;
+                controls.right = ConsoleKey.D;
+            }
 
             isAlive = lives >= 0;
             this.lives = lives;

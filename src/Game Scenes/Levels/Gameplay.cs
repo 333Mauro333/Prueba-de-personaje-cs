@@ -12,7 +12,8 @@ namespace MgtvPlayerTestCs
 
         Random generar;
 
-        Player player;
+        Player player1;
+        Player player2;
         Enemy enemy;
         PowerUp powerUp;
         UIManager ui;
@@ -36,15 +37,18 @@ namespace MgtvPlayerTestCs
 
             generar = new Random();
 
-            player = new Player(centerX, centerY, 100, "P", ConsoleColor.Yellow, 5);
-            player.SetBorderLimits(borderLimits);
+            player1 = new Player(centerX, centerY, 100, "P", ConsoleColor.Yellow);
+            player1.SetBorderLimits(borderLimits);
+
+            player2 = new Player(centerX, centerY, 100, "P", ConsoleColor.Blue, false);
+            player2.SetBorderLimits(borderLimits);
 
             enemy = new Enemy(centerX + 20, centerY + 5, 100, "E");
             enemy.SetBorderLimits(borderLimits);
 
             powerUp = new PowerUp(centerX - (int)(distCentX / 1.5), centerY - 10);
 
-            ui = new UIManager(player);
+            ui = new UIManager(player1);
             ui.SetUILivesPosition(centerX - (distCentX / 2) - 10, borderLimits.upLimit - 1);
             ui.SetUIPointsPosition(centerX + (distCentX / 2), borderLimits.upLimit - 1);
             ui.WriteUI();
@@ -82,7 +86,8 @@ namespace MgtvPlayerTestCs
 
             if (!inPause)
             {
-                player.Update(key);
+                player1.Update(key);
+                player2.Update(key);
                 enemy.Update();
 
                 CheckCollisions();
@@ -95,15 +100,16 @@ namespace MgtvPlayerTestCs
         public override void Draw()
         {
             powerUp.Draw();
-            player.Draw();
+            player1.Draw();
+            player2.Draw();
             enemy.Draw();
         }
 
         protected override void CheckCollisions()
         {
-            if (CollisionManager.IsColliding(player, enemy))
+            if (CollisionManager.IsColliding(player1, enemy))
             {
-                if (player.IsInvincible())
+                if (player1.IsInvincible())
                 {
                     int x;
                     int y;
@@ -114,7 +120,7 @@ namespace MgtvPlayerTestCs
                         x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
                         y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
 
-                    } while (CollisionManager.IsColliding(player, x, y) || CollisionManager.IsColliding(powerUp, x, y));
+                    } while (CollisionManager.IsColliding(player1, x, y) || CollisionManager.IsColliding(player2, x, y) || CollisionManager.IsColliding(powerUp, x, y));
 
                     enemy.SetPosition(x, y);
 
@@ -123,13 +129,13 @@ namespace MgtvPlayerTestCs
                         x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
                         y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
 
-                    } while (CollisionManager.IsColliding(player, x, y) || CollisionManager.IsColliding(enemy, x, y));
+                    } while (CollisionManager.IsColliding(player1, x, y) || CollisionManager.IsColliding(player2, x, y) || CollisionManager.IsColliding(enemy, x, y));
 
                     powerUp.Activate();
                     powerUp.SetPosition(x, y);
 
-                    player.EndPowerUpEfect();
-                    player.AddPoints(1);
+                    player1.EndPowerUpEfect();
+                    player1.AddPoints(1);
                     ui.UpdatePoints();
 
                     C.GoToCoordinates(C.GetScreenWidth() / 2 - 3, 0);
@@ -137,10 +143,10 @@ namespace MgtvPlayerTestCs
                 }
                 else
                 {
-                    player.Lose();
+                    player1.Lose();
                     ui.UpdateLives();
 
-                    if (player.IsAlive())
+                    if (player1.IsAlive())
                     {
                         int x;
                         int y;
@@ -151,9 +157,74 @@ namespace MgtvPlayerTestCs
                             x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
                             y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
 
-                        } while (CollisionManager.IsColliding(player, x, y));
+                        } while (CollisionManager.IsColliding(enemy, x, y) || CollisionManager.IsColliding(player2, x, y));
 
-                        player.SetPosition(x, y);
+                        player1.SetPosition(x, y);
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        C.GoToCoordinates(C.GetScreenWidth() / 2 - 5, C.GetScreenHeight() / 2);
+                        C.WriteInColor("GAME OVER", ConsoleColor.Red);
+                        C.Sleep(1000);
+                        Console.Clear();
+                        SceneManager.LoadScene(new MainMenu(1));
+                    }
+                }
+            }
+            if (CollisionManager.IsColliding(player2, enemy))
+            {
+                if (player2.IsInvincible())
+                {
+                    int x;
+                    int y;
+
+
+                    do
+                    {
+                        x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
+                        y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
+
+                    } while (CollisionManager.IsColliding(player1, x, y) || CollisionManager.IsColliding(player2, x, y) || CollisionManager.IsColliding(powerUp, x, y));
+
+                    enemy.SetPosition(x, y);
+
+                    do
+                    {
+                        x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
+                        y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
+
+                    } while (CollisionManager.IsColliding(player1, x, y) || CollisionManager.IsColliding(player2, x, y) || CollisionManager.IsColliding(enemy, x, y));
+
+                    powerUp.Activate();
+                    powerUp.SetPosition(x, y);
+
+                    player2.EndPowerUpEfect();
+                    player2.AddPoints(1);
+                    ui.UpdatePoints();
+
+                    C.GoToCoordinates(C.GetScreenWidth() / 2 - 3, 0);
+                    Console.Write("      ");
+                }
+                else
+                {
+                    player2.Lose();
+                    ui.UpdateLives();
+
+                    if (player2.IsAlive())
+                    {
+                        int x;
+                        int y;
+
+
+                        do
+                        {
+                            x = generar.Next(borderLimits.leftLimit + 1, borderLimits.rightLimit);
+                            y = generar.Next(borderLimits.upLimit + 1, borderLimits.downLimit);
+
+                        } while (CollisionManager.IsColliding(enemy, x, y) || CollisionManager.IsColliding(player1, x, y));
+
+                        player2.SetPosition(x, y);
                     }
                     else
                     {
@@ -167,11 +238,22 @@ namespace MgtvPlayerTestCs
                 }
             }
 
-            if (CollisionManager.IsColliding(player, powerUp))
+            if (CollisionManager.IsColliding(player1, powerUp))
             {
                 if (powerUp.IsActive())
                 {
-                    player.BecomeInvincible();
+                    player1.BecomeInvincible();
+                    powerUp.Deactivate();
+
+                    C.GoToCoordinates(C.GetScreenWidth() / 2 - 3, 0);
+                    C.WriteInColor("ATTACK", ConsoleColor.White, ConsoleColor.Red);
+                }
+            }
+            if (CollisionManager.IsColliding(player2, powerUp))
+            {
+                if (powerUp.IsActive())
+                {
+                    player2.BecomeInvincible();
                     powerUp.Deactivate();
 
                     C.GoToCoordinates(C.GetScreenWidth() / 2 - 3, 0);
@@ -186,14 +268,16 @@ namespace MgtvPlayerTestCs
 
             if (inPause)
             {
-                player.MakeInvisible();
+                player1.MakeInvisible();
+                player2.MakeInvisible();
                 enemy.MakeInvisible();
                 powerUp.MakeInvisible();
                 op.Activate();
             }
             else
             {
-                player.MakeVisible();
+                player1.MakeVisible();
+                player2.MakeVisible();
                 enemy.MakeVisible();
                 powerUp.MakeVisible();
                 op.Deactivate();
